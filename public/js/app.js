@@ -5183,6 +5183,13 @@ var Example = /*#__PURE__*/function (_Component) {
         title: "",
         content: "",
         user_id: ""
+      },
+      updatePostModal: false,
+      updatePostData: {
+        id: "",
+        title: "",
+        content: "",
+        user_id: ""
       }
     };
     return _this;
@@ -5218,6 +5225,35 @@ var Example = /*#__PURE__*/function (_Component) {
       });
     }
   }, {
+    key: "updatePost",
+    value: function updatePost() {
+      var _this4 = this;
+      axios__WEBPACK_IMPORTED_MODULE_0___default().put("http://127.0.0.1:8000/api/post/" + this.state.updatePostData.id, this.state.updatePostData).then(function (response) {
+        _this4.loadPost();
+        var posts = _this4.state.posts;
+        _this4.setState({
+          posts: posts,
+          updatePostModal: false,
+          updatePostData: {
+            id: "",
+            title: "",
+            content: "",
+            user_id: ""
+          }
+        });
+      });
+    }
+  }, {
+    key: "deletePost",
+    value: function deletePost(id) {
+      var _this5 = this;
+      if (confirm("Do you want delete this Post?")) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]("http://127.0.0.1:8000/api/post/" + id, {}).then(function (response) {
+          _this5.loadPost();
+        });
+      }
+    }
+  }, {
     key: "componentWillMount",
     value: function componentWillMount() {
       this.loadPost();
@@ -5226,13 +5262,20 @@ var Example = /*#__PURE__*/function (_Component) {
     key: "toggleNewPostModal",
     value: function toggleNewPostModal() {
       this.setState({
-        newPostModal: true
+        newPostModal: !this.state.newPostModal
+      });
+    }
+  }, {
+    key: "toggleUpdatePostModal",
+    value: function toggleUpdatePostModal() {
+      this.setState({
+        updatePostModal: !this.state.updatePostModal
       });
     }
   }, {
     key: "render",
     value: function render() {
-      var _this4 = this;
+      var _this6 = this;
       var posts = this.state.posts.map(function (post) {
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
@@ -5246,11 +5289,25 @@ var Example = /*#__PURE__*/function (_Component) {
               color: "success",
               size: "sm",
               className: "mr-2",
+              onClick: function onClick() {
+                _this6.setState({
+                  updatePostModal: true,
+                  updatePostData: {
+                    id: post.id,
+                    title: post.title,
+                    content: post.content,
+                    user_id: post.user_id
+                  }
+                });
+              },
               children: "Edit"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_4__["default"], {
               color: "danger",
               size: "sm",
               className: "mr-2",
+              onClick: function onClick() {
+                return _this6.deletePost(post.id);
+              },
               children: "Delete"
             })]
           })]
@@ -5277,9 +5334,9 @@ var Example = /*#__PURE__*/function (_Component) {
                 id: "title",
                 value: this.state.newPostData.title,
                 onChange: function onChange(e) {
-                  var newPostData = _this4.state.newPostData;
+                  var newPostData = _this6.state.newPostData;
                   newPostData.title = e.target.value;
-                  _this4.setState({
+                  _this6.setState({
                     newPostData: newPostData
                   });
                 }
@@ -5292,9 +5349,9 @@ var Example = /*#__PURE__*/function (_Component) {
                 id: "content",
                 value: this.state.newPostData.content,
                 onChange: function onChange(e) {
-                  var newPostData = _this4.state.newPostData;
+                  var newPostData = _this6.state.newPostData;
                   newPostData.content = e.target.value;
-                  _this4.setState({
+                  _this6.setState({
                     newPostData: newPostData
                   });
                 }
@@ -5307,9 +5364,9 @@ var Example = /*#__PURE__*/function (_Component) {
                 id: "user_id",
                 value: this.state.newPostData.user_id,
                 onChange: function onChange(e) {
-                  var newPostData = _this4.state.newPostData;
+                  var newPostData = _this6.state.newPostData;
                   newPostData.user_id = e.target.value;
-                  _this4.setState({
+                  _this6.setState({
                     newPostData: newPostData
                   });
                 }
@@ -5323,6 +5380,70 @@ var Example = /*#__PURE__*/function (_Component) {
             }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_4__["default"], {
               color: "secondary",
               onClick: this.toggleNewPostModal.bind(this),
+              children: [" ", "Cancel", " "]
+            })]
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_5__["default"], {
+          isOpen: this.state.updatePostModal,
+          toggle: this.toggleUpdatePostModal.bind(this),
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_6__["default"], {
+            toggle: this.toggleUpdatePostModal.bind(this),
+            children: [" ", "Update Post"]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_7__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_8__["default"], {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_9__["default"], {
+                "for": "title",
+                children: "Title"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_10__["default"], {
+                id: "title",
+                value: this.state.updatePostData.title,
+                onChange: function onChange(e) {
+                  var updatePostData = _this6.state.updatePostData;
+                  updatePostData.title = e.target.value;
+                  _this6.setState({
+                    updatePostData: updatePostData
+                  });
+                }
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_8__["default"], {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_9__["default"], {
+                "for": "content",
+                children: "Content"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_10__["default"], {
+                id: "content",
+                value: this.state.updatePostData.content,
+                onChange: function onChange(e) {
+                  var updatePostData = _this6.state.updatePostData;
+                  updatePostData.content = e.target.value;
+                  _this6.setState({
+                    updatePostData: updatePostData
+                  });
+                }
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_8__["default"], {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_9__["default"], {
+                "for": "user_id",
+                children: "User ID"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_10__["default"], {
+                id: "user_id",
+                value: this.state.updatePostData.user_id,
+                onChange: function onChange(e) {
+                  var updatePostData = _this6.state.updatePostData;
+                  updatePostData.user_id = e.target.value;
+                  _this6.setState({
+                    updatePostData: updatePostData
+                  });
+                }
+              })]
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_11__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_4__["default"], {
+              color: "primary",
+              onClick: this.updatePost.bind(this),
+              children: ["Update Post", " "]
+            }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_4__["default"], {
+              color: "secondary",
+              onClick: this.toggleUpdatePostModal.bind(this),
               children: [" ", "Cancel", " "]
             })]
           })]

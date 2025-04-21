@@ -24,6 +24,13 @@ export default class Example extends Component {
                 content: "",
                 user_id: "",
             },
+            updatePostModal: false,
+            updatePostData: {
+                id: "",
+                title: "",
+                content: "",
+                user_id: "",
+            },
         };
     }
     loadPost() {
@@ -56,12 +63,49 @@ export default class Example extends Component {
                 });
             });
     }
+    updatePost() {
+        axios
+            .put(
+                "http://127.0.0.1:8000/api/post/" +
+                    this.state.updatePostData.id,
+                this.state.updatePostData
+            )
+            .then((response) => {
+                this.loadPost();
+                let { posts } = this.state;
+                this.setState({
+                    posts,
+                    updatePostModal: false,
+                    updatePostData: {
+                        id: "",
+                        title: "",
+                        content: "",
+                        user_id: "",
+                    },
+                });
+            });
+    }
+
+    deletePost(id) {
+        if (confirm("Do you want delete this Post?")) {
+            axios
+                .delete("http://127.0.0.1:8000/api/post/" + id, {})
+                .then((response) => {
+                    this.loadPost();
+                });
+        }
+    }
     componentWillMount() {
         this.loadPost();
     }
     toggleNewPostModal() {
         this.setState({
-            newPostModal: true,
+            newPostModal: !this.state.newPostModal,
+        });
+    }
+    toggleUpdatePostModal() {
+        this.setState({
+            updatePostModal: !this.state.updatePostModal,
         });
     }
     render() {
@@ -72,10 +116,25 @@ export default class Example extends Component {
                     <td>{post.title}</td>
                     <td>{post.content}</td>
                     <td>
-                        <Button color="success" size="sm" className="mr-2">
+                        <Button
+                            color="success"
+                            size="sm"
+                            className="mr-2"
+                            onClick={() => {
+                                this.setState({
+                                    updatePostModal: true,
+                                    updatePostData: {
+                                        id: post.id,
+                                        title: post.title,
+                                        content: post.content,
+                                        user_id: post.user_id,
+                                    },
+                                });
+                            }}
+                        >
                             Edit
                         </Button>
-                        <Button color="danger" size="sm" className="mr-2">
+                        <Button color="danger" size="sm" className="mr-2" onClick={() => this.deletePost(post.id)}>
                             Delete
                         </Button>
                     </td>
@@ -146,6 +205,68 @@ export default class Example extends Component {
                         <Button
                             color="secondary"
                             onClick={this.toggleNewPostModal.bind(this)}
+                        >
+                            {" "}
+                            Cancel{" "}
+                        </Button>
+                    </ModalFooter>
+                </Modal>
+                <Modal
+                    isOpen={this.state.updatePostModal}
+                    toggle={this.toggleUpdatePostModal.bind(this)}
+                >
+                    <ModalHeader toggle={this.toggleUpdatePostModal.bind(this)}>
+                        {" "}
+                        Update Post
+                    </ModalHeader>
+                    <ModalBody>
+                        <FormGroup>
+                            <Label for="title">Title</Label>
+                            <Input
+                                id="title"
+                                value={this.state.updatePostData.title}
+                                onChange={(e) => {
+                                    let { updatePostData } = this.state;
+                                    updatePostData.title = e.target.value;
+                                    this.setState({ updatePostData });
+                                }}
+                            ></Input>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="content">Content</Label>
+                            <Input
+                                id="content"
+                                value={this.state.updatePostData.content}
+                                onChange={(e) => {
+                                    let { updatePostData } = this.state;
+                                    updatePostData.content = e.target.value;
+                                    this.setState({ updatePostData });
+                                }}
+                            ></Input>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="user_id">User ID</Label>
+                            <Input
+                                id="user_id"
+                                value={this.state.updatePostData.user_id}
+                                onChange={(e) => {
+                                    let { updatePostData } = this.state;
+                                    updatePostData.user_id = e.target.value;
+                                    this.setState({ updatePostData });
+                                }}
+                            ></Input>
+                        </FormGroup>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button
+                            color="primary"
+                            onClick={this.updatePost.bind(this)}
+                        >
+                            Update Post{" "}
+                        </Button>{" "}
+                        <Button
+                            color="secondary"
+                            onClick={this.toggleUpdatePostModal.bind(this)}
                         >
                             {" "}
                             Cancel{" "}
