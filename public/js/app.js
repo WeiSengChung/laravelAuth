@@ -5204,13 +5204,27 @@ var Example = /*#__PURE__*/function (_Component) {
     key: "loadPost",
     value: function loadPost() {
       var _this2 = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get("http://127.0.0.1:8000/api/posts").then(function (response) {
-        _this2.setState({
-          posts: response.data
+      if (!this.state.loginResponseData.access_token == "") {
+        axios__WEBPACK_IMPORTED_MODULE_0___default().post("http://127.0.0.1:8000/api/auth/index", {}, {
+          headers: {
+            Authorization: "Bearer ".concat(this.state.loginResponseData.access_token)
+          }
+        }).then(function (response) {
+          _this2.setState({
+            posts: response.data
+          });
         });
-      })["catch"](function (error) {
-        console.log(error);
-      });
+      }
+      // axios
+      //     .get("http://127.0.0.1:8000/api/posts")
+      //     .then((response) => {
+      //         this.setState({
+      //             posts: response.data,
+      //         });
+      //     })
+      //     .catch((error) => {
+      //         console.log(error);
+      //     });
     }
   }, {
     key: "addPost",

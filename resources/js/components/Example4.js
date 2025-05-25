@@ -40,16 +40,33 @@ export default class Example extends Component {
         };
     }
     loadPost() {
-        axios
-            .get("http://127.0.0.1:8000/api/posts")
-            .then((response) => {
-                this.setState({
-                    posts: response.data,
+        if (!this.state.loginResponseData.access_token == "") {
+            axios
+                .post(
+                    "http://127.0.0.1:8000/api/auth/index",
+                    {},
+                    {
+                        headers: {
+                            Authorization: `Bearer ${this.state.loginResponseData.access_token}`,
+                        },
+                    }
+                )
+                .then((response) => {
+                    this.setState({
+                        posts: response.data,
+                    });
                 });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        }
+        // axios
+        //     .get("http://127.0.0.1:8000/api/posts")
+        //     .then((response) => {
+        //         this.setState({
+        //             posts: response.data,
+        //         });
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //     });
     }
 
     addPost() {
