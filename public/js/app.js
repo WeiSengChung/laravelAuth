@@ -5179,6 +5179,12 @@ var Example = /*#__PURE__*/function (_Component) {
     _this.state = {
       posts: [],
       newPostModal: false,
+      loginModal: false,
+      loginData: {
+        email: "",
+        password: ""
+      },
+      loginResponseData: {},
       newPostData: {
         title: "",
         content: "",
@@ -5254,15 +5260,46 @@ var Example = /*#__PURE__*/function (_Component) {
       }
     }
   }, {
+    key: "login",
+    value: function login() {
+      var _this6 = this;
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post("http://127.0.0.1:8000/api/auth/login", this.state.loginData).then(function (response) {
+        var loginResponseData = _this6.state.loginResponseData;
+        loginResponseData = response.data;
+        _this6.setState({
+          loginResponseData: loginResponseData,
+          loginModal: false,
+          loginData: {
+            email: "",
+            password: ""
+          }
+        });
+        _this6.loadPost();
+      })["catch"](function (error) {
+        console.log(error);
+        alert("An error occurred during login.");
+      });
+    }
+  }, {
     key: "componentWillMount",
     value: function componentWillMount() {
-      this.loadPost();
+      var _this$state$loginResp;
+      if (!((_this$state$loginResp = this.state.loginResponseData) !== null && _this$state$loginResp !== void 0 && _this$state$loginResp.access_token)) {
+        this.toggleLoginModal();
+      } else this.loadPost();
     }
   }, {
     key: "toggleNewPostModal",
     value: function toggleNewPostModal() {
       this.setState({
         newPostModal: !this.state.newPostModal
+      });
+    }
+  }, {
+    key: "toggleLoginModal",
+    value: function toggleLoginModal() {
+      this.setState({
+        loginModal: !this.state.loginModal
       });
     }
   }, {
@@ -5275,7 +5312,7 @@ var Example = /*#__PURE__*/function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this6 = this;
+      var _this7 = this;
       var posts = this.state.posts.map(function (post) {
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
@@ -5290,7 +5327,7 @@ var Example = /*#__PURE__*/function (_Component) {
               size: "sm",
               className: "mr-2",
               onClick: function onClick() {
-                _this6.setState({
+                _this7.setState({
                   updatePostModal: true,
                   updatePostData: {
                     id: post.id,
@@ -5306,7 +5343,7 @@ var Example = /*#__PURE__*/function (_Component) {
               size: "sm",
               className: "mr-2",
               onClick: function onClick() {
-                return _this6.deletePost(post.id);
+                return _this7.deletePost(post.id);
               },
               children: "Delete"
             })]
@@ -5316,6 +5353,10 @@ var Example = /*#__PURE__*/function (_Component) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
         className: "container",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          color: "primary",
+          onClick: this.toggleLoginModal.bind(this),
+          children: "Login"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_4__["default"], {
           color: "primary",
           onClick: this.toggleNewPostModal.bind(this),
           children: "Add Post"
@@ -5334,9 +5375,9 @@ var Example = /*#__PURE__*/function (_Component) {
                 id: "title",
                 value: this.state.newPostData.title,
                 onChange: function onChange(e) {
-                  var newPostData = _this6.state.newPostData;
+                  var newPostData = _this7.state.newPostData;
                   newPostData.title = e.target.value;
-                  _this6.setState({
+                  _this7.setState({
                     newPostData: newPostData
                   });
                 }
@@ -5349,9 +5390,9 @@ var Example = /*#__PURE__*/function (_Component) {
                 id: "content",
                 value: this.state.newPostData.content,
                 onChange: function onChange(e) {
-                  var newPostData = _this6.state.newPostData;
+                  var newPostData = _this7.state.newPostData;
                   newPostData.content = e.target.value;
-                  _this6.setState({
+                  _this7.setState({
                     newPostData: newPostData
                   });
                 }
@@ -5364,9 +5405,9 @@ var Example = /*#__PURE__*/function (_Component) {
                 id: "user_id",
                 value: this.state.newPostData.user_id,
                 onChange: function onChange(e) {
-                  var newPostData = _this6.state.newPostData;
+                  var newPostData = _this7.state.newPostData;
                   newPostData.user_id = e.target.value;
-                  _this6.setState({
+                  _this7.setState({
                     newPostData: newPostData
                   });
                 }
@@ -5398,9 +5439,9 @@ var Example = /*#__PURE__*/function (_Component) {
                 id: "title",
                 value: this.state.updatePostData.title,
                 onChange: function onChange(e) {
-                  var updatePostData = _this6.state.updatePostData;
+                  var updatePostData = _this7.state.updatePostData;
                   updatePostData.title = e.target.value;
-                  _this6.setState({
+                  _this7.setState({
                     updatePostData: updatePostData
                   });
                 }
@@ -5413,9 +5454,9 @@ var Example = /*#__PURE__*/function (_Component) {
                 id: "content",
                 value: this.state.updatePostData.content,
                 onChange: function onChange(e) {
-                  var updatePostData = _this6.state.updatePostData;
+                  var updatePostData = _this7.state.updatePostData;
                   updatePostData.content = e.target.value;
-                  _this6.setState({
+                  _this7.setState({
                     updatePostData: updatePostData
                   });
                 }
@@ -5428,9 +5469,9 @@ var Example = /*#__PURE__*/function (_Component) {
                 id: "user_id",
                 value: this.state.updatePostData.user_id,
                 onChange: function onChange(e) {
-                  var updatePostData = _this6.state.updatePostData;
+                  var updatePostData = _this7.state.updatePostData;
                   updatePostData.user_id = e.target.value;
-                  _this6.setState({
+                  _this7.setState({
                     updatePostData: updatePostData
                   });
                 }
@@ -5444,6 +5485,55 @@ var Example = /*#__PURE__*/function (_Component) {
             }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_4__["default"], {
               color: "secondary",
               onClick: this.toggleUpdatePostModal.bind(this),
+              children: [" ", "Cancel", " "]
+            })]
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_5__["default"], {
+          isOpen: this.state.loginModal,
+          toggle: this.toggleLoginModal.bind(this),
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_6__["default"], {
+            toggle: this.toggleLoginModal.bind(this),
+            children: [" ", "Login"]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_7__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_8__["default"], {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_9__["default"], {
+                "for": "email",
+                children: "Email"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_10__["default"], {
+                id: "email",
+                value: this.state.loginData.email,
+                onChange: function onChange(e) {
+                  var loginData = _this7.state.loginData;
+                  loginData.email = e.target.value;
+                  _this7.setState({
+                    loginData: loginData
+                  });
+                }
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_8__["default"], {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_9__["default"], {
+                "for": "password",
+                children: "Password"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_10__["default"], {
+                id: "password",
+                value: this.state.loginData.password,
+                onChange: function onChange(e) {
+                  var loginData = _this7.state.loginData;
+                  loginData.password = e.target.value;
+                  _this7.setState({
+                    loginData: loginData
+                  });
+                }
+              })]
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_11__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_4__["default"], {
+              color: "primary",
+              onClick: this.login.bind(this),
+              children: ["Login", " "]
+            }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_4__["default"], {
+              color: "secondary",
+              onClick: this.toggleLoginModal.bind(this),
               children: [" ", "Cancel", " "]
             })]
           })]

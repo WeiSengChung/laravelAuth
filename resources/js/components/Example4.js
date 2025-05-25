@@ -19,6 +19,12 @@ export default class Example extends Component {
         this.state = {
             posts: [],
             newPostModal: false,
+            loginModal: false,
+            loginData: {
+                email: "",
+                password: "",
+            },
+            loginResponseData: {},
             newPostData: {
                 title: "",
                 content: "",
@@ -95,12 +101,42 @@ export default class Example extends Component {
                 });
         }
     }
+
+    login() {
+        axios
+            .post("http://127.0.0.1:8000/api/auth/login", this.state.loginData)
+            .then((response) => {
+                let { loginResponseData } = this.state;
+                loginResponseData = response.data;
+                this.setState({
+                    loginResponseData,
+                    loginModal: false,
+                    loginData: {
+                        email: "",
+                        password: "",
+                    },
+                });
+                this.loadPost();
+            })
+            .catch((error) => {
+                console.log(error);
+                alert("An error occurred during login.");
+            });
+    }
+
     componentWillMount() {
-        this.loadPost();
+        if (!this.state.loginResponseData?.access_token) {
+            this.toggleLoginModal();
+        } else this.loadPost();
     }
     toggleNewPostModal() {
         this.setState({
             newPostModal: !this.state.newPostModal,
+        });
+    }
+    toggleLoginModal() {
+        this.setState({
+            loginModal: !this.state.loginModal,
         });
     }
     toggleUpdatePostModal() {
@@ -134,7 +170,12 @@ export default class Example extends Component {
                         >
                             Edit
                         </Button>
-                        <Button color="danger" size="sm" className="mr-2" onClick={() => this.deletePost(post.id)}>
+                        <Button
+                            color="danger"
+                            size="sm"
+                            className="mr-2"
+                            onClick={() => this.deletePost(post.id)}
+                        >
                             Delete
                         </Button>
                     </td>
@@ -143,6 +184,12 @@ export default class Example extends Component {
         });
         return (
             <div className="container">
+                <Button
+                    color="primary"
+                    onClick={this.toggleLoginModal.bind(this)}
+                >
+                    Login
+                </Button>
                 <Button
                     color="primary"
                     onClick={this.toggleNewPostModal.bind(this)}
@@ -267,6 +314,53 @@ export default class Example extends Component {
                         <Button
                             color="secondary"
                             onClick={this.toggleUpdatePostModal.bind(this)}
+                        >
+                            {" "}
+                            Cancel{" "}
+                        </Button>
+                    </ModalFooter>
+                </Modal>
+                <Modal
+                    isOpen={this.state.loginModal}
+                    toggle={this.toggleLoginModal.bind(this)}
+                >
+                    <ModalHeader toggle={this.toggleLoginModal.bind(this)}>
+                        {" "}
+                        Login
+                    </ModalHeader>
+                    <ModalBody>
+                        <FormGroup>
+                            <Label for="email">Email</Label>
+                            <Input
+                                id="email"
+                                value={this.state.loginData.email}
+                                onChange={(e) => {
+                                    let { loginData } = this.state;
+                                    loginData.email = e.target.value;
+                                    this.setState({ loginData });
+                                }}
+                            ></Input>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="password">Password</Label>
+                            <Input
+                                id="password"
+                                value={this.state.loginData.password}
+                                onChange={(e) => {
+                                    let { loginData } = this.state;
+                                    loginData.password = e.target.value;
+                                    this.setState({ loginData });
+                                }}
+                            ></Input>
+                        </FormGroup>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="primary" onClick={this.login.bind(this)}>
+                            Login{" "}
+                        </Button>{" "}
+                        <Button
+                            color="secondary"
+                            onClick={this.toggleLoginModal.bind(this)}
                         >
                             {" "}
                             Cancel{" "}

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use Validator;
 use App\Models\User;
+use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 
@@ -104,5 +106,15 @@ class AuthController extends Controller
             'expires_in' => auth()->factory()->getTTL() * 60,
             'user' => auth()->user()
         ]);
+    }
+
+    public function index()
+    {
+        $authenticated = Auth::check();
+        if ($authenticated) {
+            return response()->json(Post::all());
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
     }
 }
