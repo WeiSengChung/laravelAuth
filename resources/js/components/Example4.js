@@ -39,6 +39,7 @@ export default class Example extends Component {
             },
         };
         this.toggleLoginModal = this.toggleLoginModal.bind(this);
+        this.toggleNewPostModal = this.toggleNewPostModal.bind(this);
     }
     loadPost() {
         if (!this.state.loginResponseData.access_token == "") {
@@ -210,15 +211,15 @@ export default class Example extends Component {
                 </Button>
                 <Button
                     color="primary"
-                    onClick={this.toggleNewPostModal.bind(this)}
+                    onClick={this.toggleNewPostModal}
                 >
                     Add Post
                 </Button>
                 <Modal
                     isOpen={this.state.newPostModal}
-                    toggle={this.toggleNewPostModal.bind(this)}
+                    toggle={this.toggleNewPostModal}
                 >
-                    <ModalHeader toggle={this.toggleNewPostModal.bind(this)}>
+                    <ModalHeader toggle={this.toggleNewPostModal}>
                         {" "}
                         Add New Post
                     </ModalHeader>
@@ -269,7 +270,7 @@ export default class Example extends Component {
                         </Button>{" "}
                         <Button
                             color="secondary"
-                            onClick={this.toggleNewPostModal.bind(this)}
+                            onClick={this.toggleNewPostModal}
                         >
                             {" "}
                             Cancel{" "}
