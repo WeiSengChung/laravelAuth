@@ -38,6 +38,7 @@ export default class Example extends Component {
                 user_id: "",
             },
         };
+        this.toggleLoginModal = this.toggleLoginModal.bind(this);
     }
     loadPost() {
         if (!this.state.loginResponseData.access_token == "") {
@@ -203,7 +204,7 @@ export default class Example extends Component {
             <div className="container">
                 <Button
                     color="primary"
-                    onClick={this.toggleLoginModal.bind(this)}
+                    onClick={this.toggleLoginModal}
                 >
                     Login
                 </Button>
@@ -339,9 +340,9 @@ export default class Example extends Component {
                 </Modal>
                 <Modal
                     isOpen={this.state.loginModal}
-                    toggle={this.toggleLoginModal.bind(this)}
+                    toggle={this.toggleLoginModal}
                 >
-                    <ModalHeader toggle={this.toggleLoginModal.bind(this)}>
+                    <ModalHeader toggle={this.toggleLoginModal}>
                         {" "}
                         Login
                     </ModalHeader>
@@ -377,7 +378,7 @@ export default class Example extends Component {
                         </Button>{" "}
                         <Button
                             color="secondary"
-                            onClick={this.toggleLoginModal.bind(this)}
+                            onClick={this.toggleLoginModal}
                         >
                             {" "}
                             Cancel{" "}
