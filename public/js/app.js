@@ -5532,6 +5532,7 @@ var Example = /*#__PURE__*/function (_Component) {
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_10__["default"], {
                 id: "password",
                 value: this.state.loginData.password,
+                type: "password",
                 onChange: function onChange(e) {
                   var loginData = _this7.state.loginData;
                   loginData.password = e.target.value;

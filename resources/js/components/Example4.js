@@ -364,6 +364,7 @@ export default class Example extends Component {
                             <Input
                                 id="password"
                                 value={this.state.loginData.password}
+                                type="password"
                                 onChange={(e) => {
                                     let { loginData } = this.state;
                                     loginData.password = e.target.value;
