@@ -40,6 +40,7 @@ export default class Example extends Component {
         };
         this.toggleLoginModal = this.toggleLoginModal.bind(this);
         this.toggleNewPostModal = this.toggleNewPostModal.bind(this);
+        this.toggleUpdatePostModal = this.toggleUpdatePostModal.bind(this);
     }
     loadPost() {
         if (!this.state.loginResponseData.access_token == "") {
@@ -279,9 +280,9 @@ export default class Example extends Component {
                 </Modal>
                 <Modal
                     isOpen={this.state.updatePostModal}
-                    toggle={this.toggleUpdatePostModal.bind(this)}
+                    toggle={this.toggleUpdatePostModal}
                 >
-                    <ModalHeader toggle={this.toggleUpdatePostModal.bind(this)}>
+                    <ModalHeader toggle={this.toggleUpdatePostModal}>
                         {" "}
                         Update Post
                     </ModalHeader>
@@ -332,7 +333,7 @@ export default class Example extends Component {
                         </Button>{" "}
                         <Button
                             color="secondary"
-                            onClick={this.toggleUpdatePostModal.bind(this)}
+                            onClick={this.toggleUpdatePostModal}
                         >
                             {" "}
                             Cancel{" "}
